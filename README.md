@@ -47,7 +47,6 @@ to be add
 - [ ] Input mode 추가
 - [ ] output 파일 생성 코드 추가
 - [ ] 현재 A -> TS -> B 반응만 지원함. 더 많은 반응 지원
-- [ ] pyTUN mode 추가
 
 ## Reference
 * Int J Quantum Chem. (2018) ; e25686.
