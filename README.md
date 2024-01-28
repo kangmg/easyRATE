@@ -46,6 +46,7 @@ to be add
 - [ ] Rot. symmetry number dictionary에 값 추가
 - [ ] Input mode 추가
 - [ ] output 파일 생성 코드 추가
+- [ ] 현재 A -> TS -> B 반응만 지원함
 
 ## Reference
 * Int J Quantum Chem. (2018) ; e25686.
