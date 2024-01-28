@@ -2,6 +2,9 @@
 
 ## How to use
 To be add
+```
+python easyRATE.py
+```
 
 ## Example output
 ```
