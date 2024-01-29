@@ -28,7 +28,7 @@ Gibbs(TS) = 60
 
 # RXN symmetry number #
 # 'auto' will automatically set symmetry number from your geometry file
-RXN Symmetry Number = auto
+RXN Symmetry Number = 1
 
 
 # consumption time # 
@@ -43,5 +43,5 @@ consumption_percent = 50
 
 # XYZ file (optional) #
 # xyz geometry file for auto RXN symmetry number estimation (optional)
-Reactant xyz file = gs.xyz
-TS xyz file = ts.xyz
+Reactant xyz file = 
+TS xyz file = 
