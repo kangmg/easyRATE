@@ -34,6 +34,7 @@ rot_symmetry_number = {'C1' : 1,
                        'D2h': 4,
                        'D3h': 6,
                        'D5h': 10,
+                       'Dinfh' : 2,
                        'D3d': 6,
                        'Td' : 12,
                        'Oh' : 24}
@@ -105,10 +106,24 @@ def consumption_time(percent, k_r):
 ##############################################
 
 #####       to be implemented         ##### 
-def pg_from_coordinates(xyz_coordi):
-    ## to be implemented
-    pg = 'none'
-    return pg
+
+def pg_from_xyzfile(xyz_file):
+    with open(xyz_file, "r") as file:
+        file_content = file.read()
+    first_line = file_content.strip().split('\n')[0]
+    if len(first_line.split()) == 1:
+        xyz_data = file_content.strip().split('\n')[2:]
+    elif len(first_line.split()) == 4:
+        xyz_data = file_content.strip().split('\n')
+    syms = []
+    poss = []
+    for element in xyz_data:
+        symbol = element.split()[0]
+        syms.append(symbol)
+        position = [float(flt) for flt in element.split()[1:]]
+        poss.append(position)
+    point_group = PointGroup(positions = poss, symbols = syms)
+    return point_group.get_point_group()
 
 ##############################################
 
@@ -154,14 +169,10 @@ if mode == 'interactive':
         if RSN_mode == '1':
             reactant_xyz_path = input(" Reactant xyz file path : ")
             TS_xyz_path = input(" TS xyz file path : ")
-            with open(reactant_xyz_path, 'r') as file:
-                reactant_xyz = file.read()
-                reactant_pg = pg_from_coordinates(reactant_xyz)
-                reactant_rsn = rot_symmetry_number[reactant_pg] # rotational symmetry number
-            with open(TS_xyz_path, 'r') as file:
-                TS_xyz = file.read()
-                TS_pg = pg_from_coordinates(TS_xyz)
-                TS_rsn = rot_symmetry_number[TS_pg] # rotational symmetry number
+            reactant_pg = pg_from_xyzfile(reactant_xyz_path) # Reactant Point group
+            reactant_rsn = rot_symmetry_number[reactant_pg] # Reactant rotational symmetry number
+            TS_pg = pg_from_xyzfile(TS_xyz_path) # TS Point group
+            TS_rsn = rot_symmetry_number[TS_pg] # TS rotational symmetry number
             Sym_num = float(reactant_rsn) / float(TS_rsn)
         elif RSN_mode == '2':
             Sym_num = float(input("\n RXN Symmetry Number : "))
@@ -359,14 +370,10 @@ elif mode == 'input':
     # Rxn symmetry
     if pointgroup_install == 'YES':
         if Sym_num_in == 'auto':
-            with open(reactant_xyz_path, 'r') as file:
-                reactant_xyz = file.read()
-                reactant_pg = pg_from_coordinates(reactant_xyz)
-                reactant_rsn = rot_symmetry_number[reactant_pg] # rotational symmetry number
-            with open(TS_xyz_path, 'r') as file:
-                TS_xyz = file.read()
-                TS_pg = pg_from_coordinates(TS_xyz)
-                TS_rsn = rot_symmetry_number[TS_pg] # rotational symmetry number
+            reactant_pg = pg_from_xyzfile(reactant_xyz_path) # Reactant point group
+            reactant_rsn = rot_symmetry_number[reactant_pg] # Reactant rotational symmetry number
+            TS_pg = pg_from_xyzfile(TS_xyz_path) # TS point group
+            TS_rsn = rot_symmetry_number[TS_pg] # TS rotational symmetry number
             Sym_num = float(reactant_rsn) / float(TS_rsn)
 
     # Frequency conversion

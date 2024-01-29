@@ -1,0 +1,47 @@
+# Imaginary Frequency in TS #
+Imaginary Frequency [cm^-1] = -1500
+
+
+# Temperatures #
+#   Style #1  :  Temp_1   Temp_2   Temp_3   Temp_4 ...
+#   Style #2  :  start_Temp   end_Temp   interval
+Temperatures list [K] = 300 400 10
+
+
+# Special Temperatures (optional) #
+#   Style #1  :  Stemp_1 Stemp_2 Stemp_3 ... e.g. 273.15 293.15 298.15
+#   Style #2  :  'auto'  will  set  273.15(STP) 293.15(NTP) 298.15(SATP)
+Special Temperatures [K] = auto
+
+
+# Unit Type #
+#   1   :  Hartree  
+#   2   :  kcal/mol
+#   3   :  kJ/mol
+Unit Type = 2
+
+
+# Thermodynamic Energy #
+Gibbs(Reactant) = 10
+Gibbs(TS) = 60
+
+
+# RXN symmetry number #
+# 'auto' will automatically set symmetry number from your geometry file
+RXN Symmetry Number = auto
+
+
+# consumption time # 
+# ---------------------------------------------------------------------- #
+#   This input is for calculating the decay-time of your reactant.       #
+#   But meaning of decay-time is depends on your reacton system.         #
+#   Plz be aware that 'What is the decay-time for which concentration?   #
+# ---------------------------------------------------------------------- #
+# 50 for half-life
+consumption_percent = 50 
+
+
+# XYZ file (optional) #
+# xyz geometry file for auto RXN symmetry number estimation (optional)
+Reactant xyz file = gs.xyz
+TS xyz file = ts.xyz
