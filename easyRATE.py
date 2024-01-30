@@ -23,6 +23,7 @@ except ImportError:
     print("")
     pointgroup_install = 'NO'
 
+
 import numpy as np
 import math
 from decimal import Decimal
@@ -372,13 +373,17 @@ elif mode == 'input':
     Temp_list = sorted(Temp)
     
     # Rxn symmetry
-    if pointgroup_install == 'YES':
-        if Sym_num_in == 'auto':
-            reactant_pg = pg_from_xyzfile(reactant_xyz_path) # Reactant point group
-            reactant_rsn = rot_symmetry_number[reactant_pg] # Reactant rotational symmetry number
-            TS_pg = pg_from_xyzfile(TS_xyz_path) # TS point group
-            TS_rsn = rot_symmetry_number[TS_pg] # TS rotational symmetry number
-            Sym_num = float(reactant_rsn) / float(TS_rsn)
+    if pointgroup_install == 'YES' and Sym_num_in == 'auto':
+        reactant_pg = pg_from_xyzfile(reactant_xyz_path) # Reactant point group
+        reactant_rsn = rot_symmetry_number[reactant_pg] # Reactant rotational symmetry number
+        TS_pg = pg_from_xyzfile(TS_xyz_path) # TS point group
+        TS_rsn = rot_symmetry_number[TS_pg] # TS rotational symmetry number
+        Sym_num = float(reactant_rsn) / float(TS_rsn)
+    elif pointgroup_install == 'NO' and Sym_num_in == 'auto':
+        print("\n Fatal error : Invalid 'RXN Symmetry Number' in input file.\n")
+        print(" RXN Symmetry Number 'auto' mode is depends on 'pointgroup' package")
+        print(" Plz install 'pointgroup' package. ( pip install pointgroup )\n")
+        sys.exit()
 
     # Frequency conversion
     TS_freq_s = TS_freq_cm * wavenumber2frequency
