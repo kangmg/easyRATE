@@ -1,51 +1,96 @@
 # easyRATE
 
+Eyring equation 속의 $\kappa$는 transmission coefficient로 터널링 효과를 고려한 상수입니다. 하지만 많은 경우 이 값을 알기 어렵기 때문에 1로 가정합니다. Transmission coefficient 값을 추정하는 방법은 크게 3가지 정도 알려져 있는데 Wigner, Skodje, Eckart 선생님들이 각각 만드신 방법들이 있습니다. 이중 Wigner 방법을 제외한 두 방법은 비교적 많은 정보가 필요합니다. easyRATE는 Wigner transmission correction 방법을 이용해 최소한의 정보로 간단한 transmission correction을 수행해볼 수 있는 코드입니다.
+
+Wigner transmission correction은 오직 TS에서의 `Imaginary Vibrational Frequency`에 대한 정보만을 필요로 합니다. 이 외에 Rate constant를 구하기 위해서 `Reactant와 TS에서의 Gibbs Energy`, 그리고 `온도`를 필요로 합니다. 이외에 옵션으로 Reaction Symmetry 보정을 위한 `Reactant와 TS의 xyz file`이 필요합니다.
+
+* 필요 정보
+  * 온도
+  * 전이상태에서의 허수 진동수
+  * 깁스 에너지
+  * xyz 좌표 파일 (option)
+
 ## How to use
-To be add
+두가지 사용 모드가 존재합니다.
+
+명령행 인수가 있으면 input mode로 실행되고 없으면 interactive mode로 실행됩니다.
+
+1. input mode  :  input 파일을 작성한 후 커맨드줄 인수로 제공
+2. interactive mode  :  커맨드 라인에서 필요한 값들을 직접 제공함
+
 ```
-python easyRATE.py
+# interactive mode #
+
+> python easyRATE.py
+```
+```
+# input mode #
+
+> python easyRATE.py input.inp
+```
+필요한 인풋 파일의 구조는 다음과 같습니다. ( 작성 방법은 input.inp 파일에 더 자세히 적어뒀습니다. )
+```
+# Imaginary Frequency in TS #
+Imaginary Frequency [cm^-1] = -1530
+
+
+# Temperatures #
+Temperatures list [K] = 300 500 10
+
+
+# Special Temperatures (optional) #
+Special Temperatures [K] = auto
+
+
+# Unit Type #
+#   1   :  Hartree  
+#   2   :  kcal/mol
+#   3   :  kJ/mol
+Unit Type = 2
+
+
+# Thermodynamic Energy #
+Gibbs(Reactant) = -74
+Gibbs(TS) = -39
+
+
+# RXN symmetry number #
+RXN Symmetry Number = 1
+
+
+# consumption time # 
+consumption_percent = 50 
+
+
+# XYZ file (optional) #
+Reactant xyz file = 
+TS xyz file = 
 ```
 
-## Example output
-```
-Temperature       kappa_wig             k_eyring               dacay time
-----------------------------------------------------------------------------------------------
-273.15            3.6011E+00            2.0320E-19            108164677506.0 years 9 months
-293.15            3.2583E+00            3.0103E-17            730138261.0 years 5 months
-298.15            3.1832E+00            9.4606E-17            232327028.0 years 11 months
-400.00            2.2129E+00            2.5782E-09            8.0 years 6 months
-410.00            2.1545E+00            8.7790E-09            2.0 years 6 months
-420.00            2.1002E+00            2.8215E-08            9 months 14 days
-430.00            2.0496E+00            8.5932E-08            3 months 3 days
-440.00            2.0024E+00            2.4892E-07            1 months 2 days
-450.00            1.9584E+00            6.8813E-07            11 days 15 hours
-460.00            1.9172E+00            1.8209E-06            4 days 9 hours
-470.00            1.8785E+00            4.6252E-06            1 days 17 hours
-480.00            1.8423E+00            1.1306E-05            17 hours 1 minutes
-490.00            1.8083E+00            2.6659E-05            7 hours 13 minutes
-500.00            1.7763E+00            6.0767E-05            3 hours 10 minutes
-```
 
 ## Equations
 
-to be add
-
+* wigner transmission correction
 ```math
-
 \kappa_{wig}(T) = 1 + \frac{1}{24}{\left( \frac{h |v^{\ddagger}|}{k_{b} T} \right)} ^2
-
+```
+* Eyring equation
+```math
+k(T) = \kappa_{wig}(T) \sigma_{sym} \frac{k_b T}{h} e^{-\Delta G^{\ddagger} /RT }
+```
+* Reaction Symmetry Number
+```math
+\sigma_{sym} = \frac{\sigma_{rot, Rc}}{\sigma_{rot, TS}}
 ```
 
 ## Limitation
 
 * Wigner correction의 경우 Eckart correction과 비교했을 때 저온에서 부정확함
+* gas phase rxn에 대해서만 지원함
 
 ## Todo
 
-- [ ] Reaction symmetry auto-estimation code 추가
-- [ ] Rot. symmetry number dictionary에 값 추가
-- [ ] Input mode 추가
-- [ ] output 파일 생성 코드 추가
+- [ ] Reaction symmetry auto-estimation에 필요한 point 그룹별 roatational symmetry number 추가
 - [ ] 현재 A -> TS -> B 반응만 지원함. 더 많은 반응 지원
 
 ## Reference
