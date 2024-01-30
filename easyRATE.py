@@ -1,3 +1,18 @@
+banner ='''\n----------------------------------------------------------------------------------------------
+
+
+                                           ____     _  _____ _____  
+                       ___  __ _ ___ _   _|  _ \   / \|_   _| ____| 
+                      / _ \/ _` / __| | | | |_) | / _ \ | | |  ___|   
+                     |  __/ (_| \__ \ |_| |  _ < / ___ \| | | |___  
+                      \___|\__,_|___/\__, |_| \_\_/   \_\_| |_____| 
+                                     |___/                           
+                    
+  *   easyRATE v1.0.0               
+  *   KANG MinGi
+  *   kangmg@korea.ac.kr                 
+  *   https://github.com/kangmg/easyRATE'''
+
 try:
     from pointgroup import PointGroup
     pointgroup_install = 'YES'
@@ -102,11 +117,7 @@ def consumption_time(percent, k_r):
     consumption_time = - math.log(1.0-consumption_ratio) / k_r
     return consumption_time
 
-
-##############################################
-
-#####       to be implemented         ##### 
-
+# point group from xyz file
 def pg_from_xyzfile(xyz_file):
     with open(xyz_file, "r") as file:
         file_content = file.read()
@@ -125,9 +136,7 @@ def pg_from_xyzfile(xyz_file):
     point_group = PointGroup(positions = poss, symbols = syms)
     return point_group.get_point_group()
 
-##############################################
-
-
+print(banner)
 
 if mode == 'interactive':
 
@@ -185,14 +194,14 @@ if mode == 'interactive':
     TS_freq_cm = float(input(" Transision State Imaginary Frequency [ cm^-1 ] : "))
     TS_freq_s = TS_freq_cm * wavenumber2frequency
 
-    print("\n---------------------------------------------------------------------------------")
+    print("\n----------------------------------------------------------------------------------------------")
     print("\n                                  # Rxn info. #                                  \n")
     print(f"   Reaction Symmetry :   {Sym_num}\n")
     print(f"   Imaginary Freq.   :   {TS_freq_cm}  [cm^-1]         {TS_freq_s}  [s^-1] \n")
     print(f"   Reactant Energy   :   {Gibbs_Rc}  [J/mol]         {Gibbs_Rc_own}  [{unit[Energy_unit]}] ")
     print(f"   Product  Energy   :   {Gibbs_TS}  [J/mol]         {Gibbs_TS_own}  [{unit[Energy_unit]}] ")
     print(f"   Reation Barrier   :   {Barrier}  [J/mol]         {Barrier_own}  [{unit[Energy_unit]}] ")
-    print("\n---------------------------------------------------------------------------------\n\n")
+    print("\n----------------------------------------------------------------------------------------------\n\n")
 
     # Temperature input 
 
@@ -258,7 +267,7 @@ if mode == 'interactive':
     Temp.extend(STemp)
     Temp_list = sorted(Temp)
     print("\n  #  Temperature List  #  \n")
-    print("Total Temperature List", Temp_list)
+    print("Total Temperature List : ", Temp_list)
     print("")
     print('----------------------------------------------------------------------------------------------')
 
@@ -278,6 +287,7 @@ if mode == 'interactive':
     # formatting
     print(f'Temperature       kappa_wig             k_eyring               dacay time ({100 - consumption_percent} %)')
     print('----------------------------------------------------------------------------------------------')
+    output_content = ''
     for temperature in Temp_list:
         raw = ''
         k_wigner = kappa_wigner(TS_freq_s, temperature)
@@ -285,6 +295,7 @@ if mode == 'interactive':
         decay_time = sec_to_time(consumption_time(consumption_percent, k_TST_crd))
         raw = '            '.join(map(str, ['%.2f' %temperature, '%.4E' % Decimal(k_wigner), '%.4E' % Decimal(k_TST_crd), decay_time]))
         print(raw)
+        output_content = output_content + raw + '\n'
 elif mode == 'input':
     def read_input(input):
         Temp = 1
@@ -301,7 +312,6 @@ elif mode == 'input':
             if 'Imaginary Frequency' in line:
                 TS_freq_cm = float(line.split()[-1])
                 TS_freq_s = TS_freq_cm * wavenumber2frequency
-                print('TS_freq_cm',TS_freq_cm)
 
             elif 'Temperatures list' in line:
                 Temp = [float(tmp) for tmp in line.split()[4:]]
@@ -362,8 +372,6 @@ elif mode == 'input':
     Gibbs_TS = Gibbs_TS_own * conversion_factor # [J/mol]
     Barrier =  Barrier_own * conversion_factor # [J/mol]
 
-    print(Temp)
-    print(STemp)
     Temp.extend(STemp)
     Temp_list = sorted(Temp)
     
@@ -400,7 +408,7 @@ elif mode == 'input':
     print(f"   Reation Barrier   :   {Barrier}  [J/mol]         {Barrier_own}  [{unit[Energy_unit]}] \n")
     print('----------------------------------------------------------------------------------------------')
     print("\n  #  Temperature List  #  \n")
-    print("Total Temperature List", Temp_list)
+    print("Total Temperature List : ", Temp_list)
     print("")
     print('----------------------------------------------------------------------------------------------\n')
     print(' # Result #')
@@ -408,6 +416,7 @@ elif mode == 'input':
     # formatting
     print(f'Temperature       kappa_wig             k_eyring               dacay time ({100 - consumption_percent} %)')
     print('----------------------------------------------------------------------------------------------')
+    output_content = ''
     for temperature in Temp_list:
         raw = ''
         k_wigner = kappa_wigner(TS_freq_s, temperature)
@@ -415,3 +424,23 @@ elif mode == 'input':
         decay_time = sec_to_time(consumption_time(consumption_percent, k_TST_crd))
         raw = '            '.join(map(str, ['%.2f' %temperature, '%.4E' % Decimal(k_wigner), '%.4E' % Decimal(k_TST_crd), decay_time]))
         print(raw)
+        output_content = output_content + raw + '\n'
+
+with open("esayRATE.out", "w") as file:
+
+    file.write(banner)
+    file.write("\n\n----------------------------------------------------------------------------------------------\n")
+    file.write("\n                                  # Rxn info. #                                  \n\n")
+    file.write(f"   Reaction Symmetry :   {Sym_num}\n")
+    file.write(f"   Imaginary Freq.   :   {TS_freq_cm}  [cm^-1]         {TS_freq_s}  [s^-1] \n")
+    file.write(f"   Reactant Energy   :   {Gibbs_Rc}  [J/mol]         {Gibbs_Rc_own}  [{unit[Energy_unit]}]\n")
+    file.write(f"   Product  Energy   :   {Gibbs_TS}  [J/mol]         {Gibbs_TS_own}  [{unit[Energy_unit]}]\n")
+    file.write(f"   Reation Barrier   :   {Barrier}  [J/mol]         {Barrier_own}  [{unit[Energy_unit]}] \n\n")
+    file.write('----------------------------------------------------------------------------------------------\n\n')
+    file.write("  #  Temperature List  #  \n\n")
+    file.write(f"Total Temperature List : {Temp_list}\n\n")
+    file.write('----------------------------------------------------------------------------------------------\n\n')
+    file.write(' # Result # \n\n')
+    file.write(f'Temperature       kappa_wig             k_eyring               dacay time ({100 - consumption_percent} %)\n')
+    file.write('----------------------------------------------------------------------------------------------\n')
+    file.write(output_content)

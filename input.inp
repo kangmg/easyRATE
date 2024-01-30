@@ -1,11 +1,11 @@
 # Imaginary Frequency in TS #
-Imaginary Frequency [cm^-1] = -1500
+Imaginary Frequency [cm^-1] = -1530
 
 
 # Temperatures #
 #   Style #1  :  Temp_1   Temp_2   Temp_3   Temp_4 ...
 #   Style #2  :  start_Temp   end_Temp   interval
-Temperatures list [K] = 300 400 10
+Temperatures list [K] = 300 500 10
 
 
 # Special Temperatures (optional) #
@@ -22,8 +22,8 @@ Unit Type = 2
 
 
 # Thermodynamic Energy #
-Gibbs(Reactant) = 10
-Gibbs(TS) = 60
+Gibbs(Reactant) = -74
+Gibbs(TS) = -39
 
 
 # RXN symmetry number #
