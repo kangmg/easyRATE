@@ -297,10 +297,6 @@ if mode == 'interactive':
         print(raw)
         output_content = output_content + raw + '\n'
 elif mode == 'input':
-    def read_input(input):
-        Temp = 1
-        return Temp
-    
     input_file = sys.argv[1]
     input = open(input_file, 'r')
     input.seek(0)
