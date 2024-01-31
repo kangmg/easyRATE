@@ -28,17 +28,21 @@ Wigner transmission correction은 오직 TS에서의 `Imaginary Vibrational Freq
 
 > python easyRATE.py input.inp
 ```
-필요한 인풋 파일의 구조는 다음과 같습니다. ( 작성 방법은 input.inp 파일에 더 자세히 적어뒀습니다. )
+필요한 인풋 파일의 구조는 다음과 같습니다. ( # 1개로 시작하는 줄은 주석으로 처리. ## 는 오류 발생 )
 ```
 # Imaginary Frequency in TS #
 Imaginary Frequency [cm^-1] = -1530
 
 
 # Temperatures #
+#   Style #1  :  Temp_1   Temp_2   Temp_3   Temp_4 ...
+#   Style #2  :  start_Temp   end_Temp   interval
 Temperatures list [K] = 300 500 10
 
 
 # Special Temperatures (optional) #
+#   Style #1  :  Stemp_1 Stemp_2 Stemp_3 ... e.g. 273.15 293.15 298.15
+#   Style #2  :  'auto'  will  set  273.15(STP) 293.15(NTP) 298.15(SATP)
 Special Temperatures [K] = auto
 
 
@@ -55,14 +59,22 @@ Gibbs(TS) = -39
 
 
 # RXN symmetry number #
+# 'auto' will automatically set symmetry number from your geometry file
 RXN Symmetry Number = 1
 
 
 # consumption time # 
-consumption_percent = 50 
+# ---------------------------------------------------------------------- #
+#   This input is for calculating the decay-time of your reactant.       #
+#   But meaning of decay-time is depends on your reacton system.         #
+#   Plz be aware that 'What is the decay-time for which concentration?   #
+# ---------------------------------------------------------------------- #
+# 50 for half-life
+consumption percent = 50 
 
 
 # XYZ file (optional) #
+# xyz geometry file for auto RXN symmetry number estimation (optional)
 Reactant xyz file = 
 TS xyz file = 
 ```
