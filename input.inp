@@ -38,7 +38,7 @@ RXN Symmetry Number = 1
 #   Plz be aware that 'What is the decay-time for which concentration?   #
 # ---------------------------------------------------------------------- #
 # 50 for half-life
-consumption_percent = 50 
+consumption percent = 50 
 
 
 # XYZ file (optional) #

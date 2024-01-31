@@ -286,7 +286,7 @@ if mode == 'interactive':
     """
 
     # formatting
-    print(f'Temperature       kappa_wig             k_eyring               dacay time ({100 - consumption_percent} %)')
+    print(f'Temperature       kappa_wig         k_eyring              dacay time ({100 - consumption_percent} %)')
     print('----------------------------------------------------------------------------------------------')
     output_content = ''
     for temperature in Temp_list:
@@ -294,7 +294,7 @@ if mode == 'interactive':
         k_wigner = kappa_wigner(TS_freq_s, temperature)
         k_TST_crd = rate_constant_tst(temperature, Barrier) * Sym_num * k_wigner
         decay_time = sec_to_time(consumption_time(consumption_percent, k_TST_crd))
-        raw = '            '.join(map(str, ['%.2f' %temperature, '%.4E' % Decimal(k_wigner), '%.4E' % Decimal(k_TST_crd), decay_time]))
+        raw = '            '.join(map(str, ['%.2f' %temperature, '%.4f' % np.round(k_wigner,4), '%.4E' % Decimal(k_TST_crd), decay_time]))
         print(raw)
         output_content = output_content + raw + '\n'
 elif mode == 'input':
@@ -326,6 +326,9 @@ elif mode == 'input':
                     STemp = [273.15, 293.15, 298.15]
                 else:
                     STemp = [float(tmp) for tmp in line.split()[4:]]
+            
+            elif 'consumption percent' in line:
+                consumption_percent = float(line.split()[3])
 
             elif 'Unit Type' in line:
                 Energy_unit = line.split()[3]
@@ -386,12 +389,12 @@ elif mode == 'input':
         sys.exit()
 
     # Frequency conversion
-    TS_freq_s = TS_freq_cm * wavenumber2frequency
+    # TS_freq_s = TS_freq_cm * wavenumber2frequency
 
 
     # consumption time
     # half life (default)
-    consumption_percent = 50 
+    #consumption_percent = 50 
 
     """
     This input is for calculating the decay-time of your reactant.
@@ -415,7 +418,7 @@ elif mode == 'input':
     print(' # Result #')
     print('')
     # formatting
-    print(f'Temperature       kappa_wig             k_eyring               dacay time ({100 - consumption_percent} %)')
+    print(f'Temperature       kappa_wig         k_eyring              dacay time ({100 - consumption_percent} %)')
     print('----------------------------------------------------------------------------------------------')
     output_content = ''
     for temperature in Temp_list:
@@ -423,7 +426,7 @@ elif mode == 'input':
         k_wigner = kappa_wigner(TS_freq_s, temperature)
         k_TST_crd = rate_constant_tst(temperature, Barrier) * Sym_num * k_wigner
         decay_time = sec_to_time(consumption_time(consumption_percent, k_TST_crd))
-        raw = '            '.join(map(str, ['%.2f' %temperature, '%.4E' % Decimal(k_wigner), '%.4E' % Decimal(k_TST_crd), decay_time]))
+        raw = '            '.join(map(str, ['%.2f' %temperature, '%.4f' % np.round(k_wigner,2), '%.4E' % Decimal(k_TST_crd), decay_time]))
         print(raw)
         output_content = output_content + raw + '\n'
 
@@ -442,6 +445,6 @@ with open("esayRATE.out", "w") as file:
     file.write(f"Total Temperature List : {Temp_list}\n\n")
     file.write('----------------------------------------------------------------------------------------------\n\n')
     file.write(' # Result # \n\n')
-    file.write(f'Temperature       kappa_wig             k_eyring               dacay time ({100 - consumption_percent} %)\n')
+    file.write(f'Temperature       kappa_wig         k_eyring              dacay time ({100 - consumption_percent} %)\n')
     file.write('----------------------------------------------------------------------------------------------\n')
     file.write(output_content)
